@@ -35,7 +35,9 @@ dependencies {
 	// 의존성 추가 
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	// implementation 'javax.servlet:jstl' spring 3.x.x 버전에서 사용 안됨
-	implementation group: 'org.glassfish.web', name: 'jakarta.servlet.jsp.jstl', version: '2.0.0'
+	implementation group: 'org.glassfish.web', name: 'jakarta.servlet.jsp.jstl', version: '3.0.0'
+	
+
 }
 
 tasks.named('bootBuildImage') {
