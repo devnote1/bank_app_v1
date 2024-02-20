@@ -17,7 +17,7 @@
 <!-- 코드 수정 해주세요  -->
 <!-- 내부 스타일 시트 삭제   -->
 <!-- 외부 스타일 시트 가져오기 -->
-<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="/css/common.css">
 </head>
 <body>
 	<div class="m-flex-container">
