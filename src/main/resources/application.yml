@@ -16,7 +16,13 @@ spring:
     driver-class-name: org.h2.Driver  # JDBC 드라이버 클래스를 설정합니다.
     username: sa  # 데이터베이스 연결을 위한 사용자 이름을 설정합니다.
     password: ''  # 데이터베이스 연결을 위한 비밀번호를 설정합니다. 여기서는 비밀번호를 빈 문자열로 설정했습니다.
-
+  sql:  # <---- 코드를 추가 
+    init:
+      schema-locations: 
+      - classpath:db/table.sql  
+      data-locations:
+      - classpath:db/data.sql
+      
   h2:
     console:
       enabled: true  # H2 데이터베이스 콘솔을 활성화합니다.
