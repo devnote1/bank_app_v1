@@ -4,9 +4,10 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import com.tenco.bank.repository.model.Account;
 
-@Mapper // 반드시 작성 
+@Mapper  
 public interface AccountRepository {
 	
+	// 코드 확인 (계좌 생성) 
 	public int insert(Account account);
 	public int updateById(Account account);
 	public int deleteById(Integer id);
