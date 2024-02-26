@@ -17,10 +17,7 @@ import com.tenco.bank.handler.exception.UnAuthorizedException;
  */
 @ControllerAdvice
 public class GlobalControllerAdvice {
-
-	/**
-	 * 모든 예외 클래스를 알 수 없기 때문에 로깅으로 확인인 할 수 있도록 설정 참고 동기적 방식에 로깅은 지양
-	 */
+	
 	@ExceptionHandler(Exception.class)
 	public void exception(Exception e) {
 		System.out.println("-----------------------");
@@ -39,11 +36,9 @@ public class GlobalControllerAdvice {
 		modelAndView.addObject("message", e.getMessage());
 		return modelAndView; // 페이지 반환 + 데이터 내려줌
 	}
-	
+
 	/**
-	 * Data 로 예외를 내려 주기 위해  
-	 * ResponseBody 활용 
-	 * 브라우저에서 스크립트 코드로 동작 
+	 * Data 로 예외를 내려 주기 위해 ResponseBody 활용 브라우저에서 스크립트 코드로 동작
 	 */
 	@ResponseBody
 	@ExceptionHandler(DataDeliveryException.class)
@@ -55,15 +50,16 @@ public class GlobalControllerAdvice {
 		sb.append("</script>");
 		return sb.toString();
 	}
-	
+
 	@ResponseBody
 	@ExceptionHandler(UnAuthorizedException.class)
 	public String unAuthorizedException(UnAuthorizedException e) {
 		StringBuffer sb = new StringBuffer();
+
 		sb.append("<script>");
 		sb.append("alert('" + e.getMessage() + "');");
-		// Todo - 로그인 페이지로 수정 예정
-		sb.append("window.history.back();");
+		// 코드 수정 
+		sb.append("location.href='/user/sign-in';");
 		sb.append("</script>");
 		return sb.toString();
 	}
