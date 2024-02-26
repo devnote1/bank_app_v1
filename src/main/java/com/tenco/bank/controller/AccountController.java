@@ -16,10 +16,11 @@ import com.tenco.bank.handler.exception.UnAuthorizedException;
 import com.tenco.bank.repository.model.Account;
 import com.tenco.bank.repository.model.User;
 import com.tenco.bank.service.AccountService;
+import com.tenco.bank.utils.Define;
 
 import jakarta.servlet.http.HttpSession;
 
-@Controller // IoC
+@Controller 
 @RequestMapping("/account")
 public class AccountController {
 
@@ -28,7 +29,6 @@ public class AccountController {
 	@Autowired
 	private final AccountService accountService;
 
-	// 생성자 의존 주입 - DI 처리
 	public AccountController(HttpSession session, AccountService accountService) {
 		this.session = session;
 		this.accountService = accountService;
@@ -43,13 +43,11 @@ public class AccountController {
 	@GetMapping({ "/list", "/" })
 	public String listPage(Model model) {
 		
-		// 1.인증 검사가 필요(account 전체 필요)
-		User principal = (User) session.getAttribute("principal");
+		User principal = (User) session.getAttribute(Define.PRINCIPAL);
 		if (principal == null) {
-			throw new UnAuthorizedException("인증된 사용자가 아닙니다", HttpStatus.UNAUTHORIZED);
+			throw new UnAuthorizedException(Define.NOT_AN_AUTHENTICATED_USER, HttpStatus.UNAUTHORIZED);
 		}
 
-		// 경우의 수 -> 유, 무
 		List<Account> accountList = accountService.readAccountListByUserId(principal.getId());
 
 		if (accountList.isEmpty()) {
@@ -61,43 +59,43 @@ public class AccountController {
 		return "account/list";
 	}
 
-	// 주소 설계 - http://localhost:8080/account/save
+	/**
+	 * 계좌 생성 화면 요청 
+	 * @return account/save.jsp 
+	 */
 	@GetMapping("/save")
 	public String savePage() {
-		// 1.인증 검사가 필요(account 전체 필요)
-		User principal = (User) session.getAttribute("principal");
+		User principal = (User) session.getAttribute(Define.PRINCIPAL);
 		if (principal == null) {
-			throw new UnAuthorizedException("인증된 사용자가 아닙니다", HttpStatus.UNAUTHORIZED);
+			throw new UnAuthorizedException(Define.NOT_AN_AUTHENTICATED_USER, HttpStatus.UNAUTHORIZED);
 		}
 		return "account/save";
 	}
-
+	
+	/**
+	 * 계좌 생성 처리 
+	 * @param AccountSaveDTO
+	 * @return 계좌 목록 화면 이동 
+	 */
 	@PostMapping("/save")
 	public String saveProc(AccountSaveDTO dto) {
-		// 유효성 검사보다 먼저 인증검사를 먼저 하는 것이 좋습니다.
-
-		// 1. 인증검사
-		User principal = (User) session.getAttribute("principal");
+		
+		User principal = (User) session.getAttribute(Define.PRINCIPAL);
 		if (principal == null) {
-			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
+			throw new UnAuthorizedException(Define.ENTER_YOUR_LOGIN, HttpStatus.UNAUTHORIZED);
 		}
-
-		// 2. 유효성 검사
 		if (dto.getNumber() == null || dto.getNumber().isEmpty()) {
-			throw new DataDeliveryException("계좌번호를 입력하시오", HttpStatus.BAD_REQUEST);
+			throw new DataDeliveryException(Define.ENTER_YOUR_ACCOUNT_NUMBER, HttpStatus.BAD_REQUEST);
 		}
-
 		if (dto.getPassword() == null || dto.getPassword().isEmpty()) {
-			throw new DataDeliveryException("계좌비밀번호를 입력하시오", HttpStatus.BAD_REQUEST);
+			throw new DataDeliveryException(Define.ENTER_YOUR_PASSWORD, HttpStatus.BAD_REQUEST);
 		}
-
 		if (dto.getBalance() == null || dto.getBalance() <= 0) {
-			throw new DataDeliveryException("잘못된 입력 입니다", HttpStatus.BAD_REQUEST);
+			throw new DataDeliveryException(Define.INVALID_INPUT, HttpStatus.BAD_REQUEST);
 		}
 		accountService.createAccount(dto, principal.getId());
 
-		// TODO 추후 account/list 페이지가 만들어 지면 수정 할 예정 입니다.
-		return "redirect:/account/save";
+		return "redirect:/account/list";
 	}
 
 }

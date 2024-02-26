@@ -10,8 +10,6 @@ public interface HistoryRepository {
 	public int insert(History history);
 	public int updateById(History history);
 	public int deleteById(Integer id);
-	
-	// 계좌 조회 
 	public History findById(Integer id);
 	public List<History> findAll();
 }

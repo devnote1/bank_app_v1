@@ -13,6 +13,7 @@ import com.tenco.bank.handler.exception.DataDeliveryException;
 import com.tenco.bank.handler.exception.RedirectException;
 import com.tenco.bank.repository.interfaces.AccountRepository;
 import com.tenco.bank.repository.model.Account;
+import com.tenco.bank.utils.Define;
 
 @Service
 public class AccountService {
@@ -35,29 +36,25 @@ public class AccountService {
 		try {
 			accountRepository.insert(dto.toAccount(pricipalId));
 		} catch (DataAccessException e) {
-			// DB연결 및 제약 사항 위한 및 쿼리 오류 
-			throw new DataDeliveryException("잘못된 처리 입니다", HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new DataDeliveryException(Define.INVALID_INPUT, HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (Exception e) {
-			// 예외 처리 - 에러 페이지로 이동
-			throw new RedirectException("알 수 없는 오류", HttpStatus.SERVICE_UNAVAILABLE);
+			throw new RedirectException(Define.UNKNOWN, HttpStatus.SERVICE_UNAVAILABLE);
 		}
 	}
 	
 	/**
-	 * 복잡한 Select 쿼리문일 경우 트랜잭션 처리를 해주 것이 좋습니다.  
-	 * 여기서는 단순한 Select 구문이라 바로 진행 합니다. 
+	 * 사용자별 계좌 번호 조회 서비스 
 	 * @param principalId
-	 * @return
+	 * @return List<Account> or Null 
 	 */
 	public List<Account> readAccountListByUserId(Integer principalId) {
 		List<Account> accountListEntity = null;
 		try {
 			accountListEntity = accountRepository.findAllByUserId(principalId);
 		} catch (DataAccessException e) {
-			throw new DataDeliveryException("잘못된 처리 입니다", HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new DataDeliveryException(Define.INVALID_INPUT, HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (Exception e) {
-			// 예외 처리 - 에러 페이지로 이동
-			throw new RedirectException("알 수 없는 오류", HttpStatus.SERVICE_UNAVAILABLE);
+			throw new RedirectException(Define.UNKNOWN, HttpStatus.SERVICE_UNAVAILABLE);
 		}
 		return accountListEntity;
 	}
