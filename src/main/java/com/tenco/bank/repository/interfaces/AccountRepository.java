@@ -14,4 +14,5 @@ public interface AccountRepository {
 	public int deleteById(Integer id); 
 	public List<Account> findAllByUserId(@Param("userId") Integer principalId);
 	public Account findByNumber(Integer id);
+
 }
