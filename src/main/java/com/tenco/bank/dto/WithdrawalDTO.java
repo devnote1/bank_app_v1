@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class WithdrawalDTO {
 	private Long amount;
-	private Integer wAccountNumber;
+	private String wAccountNumber;
 	private String wAccountPassword;
 }

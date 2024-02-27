@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class DepositDto {
 	private Long amount;
-	private Integer dAccountNumber;
+	private String dAccountNumber;
 }

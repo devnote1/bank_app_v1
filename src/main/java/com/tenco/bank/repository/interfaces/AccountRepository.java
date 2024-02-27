@@ -13,6 +13,6 @@ public interface AccountRepository {
 	public int updateById(Account account);
 	public int deleteById(Integer id); 
 	public List<Account> findAllByUserId(@Param("userId") Integer principalId);
-	public Account findByNumber(Integer id);
+	public Account findByNumber(@Param("number")String id);
 
 }
