@@ -1,5 +1,6 @@
 package com.tenco.bank.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tenco.bank.dto.AccountSaveDTO;
 import com.tenco.bank.dto.DepositDto;
+import com.tenco.bank.dto.HistoryAccountDTO;
 import com.tenco.bank.dto.TransferDTO;
 import com.tenco.bank.dto.WithdrawalDTO;
 import com.tenco.bank.handler.exception.DataDeliveryException;
@@ -222,7 +226,10 @@ public class AccountController {
 	public String transferProc(TransferDTO dto) {
 		// 1. 인증 검사
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-
+		if (principal == null) {
+			throw new UnAuthorizedException(Define.ENTER_YOUR_LOGIN, HttpStatus.UNAUTHORIZED);
+		}
+		
 		// 2. 유효성 검사
 		if (dto.getAmount() == null) {
 			throw new DataDeliveryException(Define.ENTER_YOUR_BALANCE, HttpStatus.BAD_REQUEST);
@@ -244,6 +251,44 @@ public class AccountController {
 		accountService.updateAccountTransfer(dto, principal.getId());
 
 		return "redirect:/account/list";
+	}
+	
+	
+	/**
+	 * 계좌 상세 보기 요청 
+	 * @param accountId 
+	 * @param type = ["all", "deposit", "withdrawal"] 
+	 * @return account/detail.jsp 
+	 */
+	@GetMapping("/detail/{accountId}")
+	public String detail(@PathVariable Integer accountId, @RequestParam(name = "type", defaultValue = "all", required = false) String type, Model model) {
+		
+		// 1. 인증 검사
+		User principal = (User) session.getAttribute(Define.PRINCIPAL);
+		if (principal == null) {
+				throw new UnAuthorizedException(Define.ENTER_YOUR_LOGIN, HttpStatus.UNAUTHORIZED);
+		}
+		
+		// 2. 유효성 검사
+	    List<String> validTypes = Arrays.asList("all", "deposit", "withdrawal"); // 허용되는 type 값들
+	    if(!validTypes.contains(type)) {
+	        throw new DataDeliveryException("유효하지 않은 접근 입니다.", HttpStatus.BAD_REQUEST);
+	    }
+	     
+		// 화면을 구성하기위해 필요한 데이터 
+		// 소유자 이름 - account_tb 
+		// 계좌 번호(1개), 현재 계좌 잔액 - account_tb   
+		// 거래 내역  - history_tb 
+	    
+		Account account = accountService.readAccountById(accountId); 
+		List<HistoryAccountDTO> historyList = accountService.readHistoryByAccountId(type, accountId);
+		
+		// 데이터 JSP 내려 주기 
+		model.addAttribute(Define.PRINCIPAL, principal);
+		model.addAttribute("account", account);
+		model.addAttribute("historyList", historyList);
+		
+		return "account/detail";
 	}
 
 }
