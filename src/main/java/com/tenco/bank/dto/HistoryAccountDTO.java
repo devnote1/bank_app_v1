@@ -2,11 +2,16 @@ package com.tenco.bank.dto;
 
 import java.sql.Timestamp;
 
-import lombok.Data;
+import com.tenco.bank.utils.ValueFormatter;
 
-// model 패키지가 아님 DTO 패키지에 넣는 이유는 왜 일까? 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+
 @Data
-public class HistoryAccountDTO {
+@EqualsAndHashCode(callSuper=false)
+//슈퍼클래스의 equals와 hashCode를 호출하지 않음을 명시
+public class HistoryAccountDTO extends ValueFormatter {
 	private Integer id;
 	private Long amount; 
 	private Long balance;

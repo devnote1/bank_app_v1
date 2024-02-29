@@ -1,20 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/view/layout/header.jsp"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<style>
-.user--box {
-	border: 1px solid black;
-	padding: 10px;
-}
-</style>
 <div class="col-sm-8 d-flex flex-column">
-	<h2>계좌 상세 보기(인증)</h2>
-	<h5>어서오세요 환영합니다</h5>
-	<div class="bg-light p-md-5 h-75">
-		<div class="user--box">
+	<h2 class="pl-3">계좌 상세 보기(인증)</h2>
+	<h5 class="pl-3">어서오세요 환영합니다</h5>
+	<div class="p-md-3 7-55">
+		<div class="container p-3 my-3 bg-dark text-white">
 			${principal.username}님 계좌<br>
 			계좌번호 : ${account.number}<br> 
-			잔액 : ${account.balance}원 
+			계좌잔액 : ${account.formatKoreanWon(account.balance)} 
 		</div>
 		<br>
 		<div>
@@ -36,11 +30,11 @@
 			<tbody>
 			<c:forEach var="history" items="${historyList}">
 				<tr>
-					<th>${history.createdAt}</th>
+					<th>${history.timestampToString(history.createdAt)}</th>
 					<th>${history.sender}</th>
 					<th>${history.receiver}</th>
-					<th>${history.amount}</th>
-					<th>${history.balance}</th>
+					<th>${history.formatKoreanWon(history.amount)}</th>
+					<th>${history.formatKoreanWon(history.balance)}</th>
 				</tr>
 			</c:forEach>
 			</tbody>

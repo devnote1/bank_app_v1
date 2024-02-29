@@ -4,12 +4,15 @@ import java.sql.Timestamp;
 
 import org.springframework.http.HttpStatus;
 
+import com.tenco.bank.dto.HistoryAccountDTO;
 import com.tenco.bank.handler.exception.DataDeliveryException;
 import com.tenco.bank.utils.Define;
+import com.tenco.bank.utils.ValueFormatter;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
@@ -17,7 +20,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Account {
+@EqualsAndHashCode(callSuper=false)
+//슈퍼클래스의 equals와 hashCode를 호출하지 않음을 명시
+public class Account extends ValueFormatter {
 	private Integer id;
 	private String number;
 	private String password;
