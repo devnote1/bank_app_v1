@@ -4,17 +4,17 @@
 <mapper
 	namespace="com.tenco.bank.repository.interfaces.UserRepository">
 
-	<!-- 반드시 세미콜론을 제거 해야 한다 -->
-	<!-- #{username} 객체에 속성값으로 설정 해야 한다 -->
 	<insert id="insert">
-		insert into user_tb (username, password, fullname,
-		created_at)
-		values( #{username}, #{password}, #{fullname}, now())
+		insert into user_tb (username, password, fullname, created_at,
+		origin_file_name, upload_file_name)
+		values( #{username}, #{password}, #{fullname}, now(), #{originFileName},
+		#{uploadFileName})
 	</insert>
 
 	<update id="updateById">
 		update user_tb set username = #{username},
-		password = #{password},
+		password =
+		#{password},
 		fullname = #{fullname} where id = #{id}
 	</update>
 
@@ -35,12 +35,14 @@
 	<select id="findByUsernameAndPassword"
 		resultType="com.tenco.bank.repository.model.User">
 		select * from user_tb
-		where username = #{username} and password = #{password}
+		where username = #{username} and
+		password = #{password}
 	</select>
-	
-	<select id="findByUsername" resultType="com.tenco.bank.repository.model.User">
+
+	<select id="findByUsername"
+		resultType="com.tenco.bank.repository.model.User">
 		select * from user_tb
-		where username = #{username} 
+		where username = #{username}
 	</select>
 
 </mapper>

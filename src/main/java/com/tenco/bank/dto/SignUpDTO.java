@@ -1,5 +1,7 @@
 package com.tenco.bank.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.tenco.bank.repository.model.User;
 
 import lombok.AllArgsConstructor;
@@ -16,7 +18,11 @@ public class SignUpDTO {
 	
 	private String username;
 	private String password; 
-	private String fullname; 
+	private String fullname;
+	// name 속성과 일치 시켜야 함 - 다중 처리는 MultipartFile[] 배열 활용 
+	private MultipartFile mFile;  
+	private String originFileName; 
+	private String uploadFileName; 
 	
 	// 2단계  
     public User toUser() {
@@ -24,12 +30,8 @@ public class SignUpDTO {
                 .username(this.username)
                 .password(this.password)
                 .fullname(this.fullname)
+                .originFileName(originFileName)
+                .uploadFileName(uploadFileName)
                 .build();
     }
-
-//  ToDo 추후 진해 예정 	
-//	private MultipartFile customFile; // name 속성과 일치 시켜야 함
-//	private String originFileName; 
-//	private String uploadFileName; 
-//	private String eMail;
 }

@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 			</div>
+		<br>
 		<div class="jumbotron text-center" style="margin-bottom: 0">
 			<p>Footer</p>
 		</div>

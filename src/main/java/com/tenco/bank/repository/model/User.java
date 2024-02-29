@@ -15,6 +15,8 @@ public class User {
 	private Integer id; 
 	private String username;
 	private String password; 
+	private String originFileName; 
+	private String uploadFileName;
 	private String fullname; 
 	private Timestamp createdAt; 
 }

@@ -29,3 +29,9 @@ create table history_tb(
 	created_at timestamp not null default now()
 );
 
+alter table user_tb
+add column origin_file_name varchar(200);
+
+alter table user_tb
+add column upload_file_name varchar(200);
+

@@ -58,6 +58,7 @@ public class UserController {
 		if (dto.getFullname() == null || dto.getFullname().isEmpty()) {
 			throw new DataDeliveryException(Define.ENTER_YOUR_FULLNAME, HttpStatus.BAD_REQUEST);
 		}
+		
 		userService.createUser(dto);
 	
 		return "redirect:/user/sign-in";
