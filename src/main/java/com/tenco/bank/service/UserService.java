@@ -3,8 +3,8 @@ package com.tenco.bank.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.tenco.bank.dto.SignUpDTO;
 import com.tenco.bank.dto.SigninDTO;
@@ -14,15 +14,17 @@ import com.tenco.bank.repository.interfaces.UserRepository;
 import com.tenco.bank.repository.model.User;
 import com.tenco.bank.utils.Define;
 
-@Service  
-public class UserService {
+import lombok.RequiredArgsConstructor;
 
+@Service
+@RequiredArgsConstructor
+public class UserService {
+	 
+	@Autowired // DI 처리 
+	private final PasswordEncoder passwordEncoder;
 	@Autowired
 	private final UserRepository userRepository;
 
-	public UserService(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
 	
 	/**
 	 * 회원 생성 서비스  
@@ -31,6 +33,10 @@ public class UserService {
 	public void createUser(SignUpDTO dto) {
 		int result = 0; 
 		try {
+			 
+			// 회원가입 요청자기 제출한 password 부분을 암화호 처리
+			String hashPwd = passwordEncoder.encode(dto.getPassword());
+			dto.setPassword(hashPwd);
 			result = userRepository.insert(dto.toUser());
 		} catch (DataAccessException e) {
 			throw new DataDeliveryException(Define.INVALID_INPUT,HttpStatus.INTERNAL_SERVER_ERROR);
@@ -43,6 +49,11 @@ public class UserService {
 		}
 	}
 	
+	// 사용자 이름만으로 정보 조회
+	public User readUserByUsername(String username) {
+		return userRepository.findByUsername(username);
+	}
+	
 	/**
 	 * 로그인 서비스 
 	 * @param SigninDTO
@@ -51,17 +62,23 @@ public class UserService {
 	public User signIn(SigninDTO dto) {
 		User userEntity = null; 
 		try {
-			userEntity = userRepository.findByUsernameAndPassword(dto.getUsername(), dto.getPassword());
+			userEntity = userRepository.findByUsername(dto.getUsername());
 		} catch (DataAccessException e) {
 			throw new DataDeliveryException(Define.INVALID_INPUT,HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (Exception e) {
 			throw new RedirectException(Define.UNKNOWN , HttpStatus.SERVICE_UNAVAILABLE);
 		}
-		// todo - 추후 수정 예정 
-		// username, password 분리 예정 
+
 		if(userEntity == null) {
-			throw new DataDeliveryException("아이디 혹은 비번이 틀렸습니다",
+			throw new DataDeliveryException("아이디를 확인해주세요",
 					HttpStatus.BAD_REQUEST);
+		}
+		
+		boolean isPwdMatched = passwordEncoder.matches(dto.getPassword(), 
+														userEntity.getPassword());
+		if(isPwdMatched == false) {
+			throw new DataDeliveryException("비밀번호가 잘못되었습니다.",
+										HttpStatus.BAD_REQUEST);
 		}
 		return userEntity;
 	}

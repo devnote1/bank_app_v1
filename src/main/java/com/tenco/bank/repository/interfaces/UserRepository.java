@@ -14,5 +14,5 @@ public interface UserRepository {
 	public User findById(Integer id);
 	public List<User> findAll();
 	public User findByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
-	
+	public User findByUsername(String username);
 }
