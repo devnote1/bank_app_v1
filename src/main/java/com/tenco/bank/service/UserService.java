@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,11 +26,15 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-	 
+	
 	@Autowired // DI 처리 
 	private final PasswordEncoder passwordEncoder;
 	@Autowired
 	private final UserRepository userRepository;
+	// 코드 추가 
+	@Value("${file.upload-dir}")
+	private String uploadDir;
+	
 	
 	/**
 	 * 회원 생성 서비스  
@@ -75,8 +80,10 @@ public class UserService {
 	        throw new DataDeliveryException("파일 크기는 20MB 이상 클 수 없습니다", HttpStatus.BAD_REQUEST);
 	    }
 	    	
-	    // 서버 컴퓨터에 파일 넣을 디렉토리가 있는지 검사 
-	    String saveDirectory = Define.UPLOAD_FILE_DERECTORY;  
+	    // 코드 수정 
+	    // getAbsolutePath() : 파일 시스템의 절대 경로를 나타냅니다
+	    // (리눅스 또는 MacOS)
+	    String saveDirectory = new File(uploadDir).getAbsolutePath();
 	    File directory = new File(saveDirectory);
 	    // 폴더가 없다면 생성 처리 
 	    if (!directory.exists()) {
@@ -86,7 +93,9 @@ public class UserService {
 	    // 파일 이름 (중복 처리 예방) 
 	    String uploadFileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 	    String uploadPath = saveDirectory + File.separator + uploadFileName;
+	    System.out.println("uploadPath : " + uploadPath);
 	    File destination = new File(uploadPath);
+	    System.out.println("destination : " + destination);
 
 	    try {
 	        file.transferTo(destination);
