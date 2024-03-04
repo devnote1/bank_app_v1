@@ -18,7 +18,7 @@
 	  </div>
   	  <div class="form-group">
 	    <label for="balance">Deposit Amount :</label>
-	    <input type="password" name="balance" class="form-control" placeholder="Enter balance" id="balance" value="2000">
+	    <input type=number name="balance" class="form-control" placeholder="Enter balance" id="balance" value="2000">
 	  </div>
 	
 	<div class="text-right">
