@@ -48,6 +48,6 @@ logging:
     
 
 file:
-  upload-dir: uploads/  # yml 파일에 파일 업로드 디렉토리 경로 설정
+  upload-dir: /home/ubuntu/uploads/  # yml 파일에 파일 업로드 디렉토리 경로 설정
   
     

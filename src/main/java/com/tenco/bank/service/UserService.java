@@ -100,6 +100,7 @@ public class UserService {
 	    try {
 	        file.transferTo(destination);
 	    } catch (IllegalStateException | IOException e) {
+	    	e.printStackTrace();
 	        throw new DataDeliveryException("파일 업로드 중 오류가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	    

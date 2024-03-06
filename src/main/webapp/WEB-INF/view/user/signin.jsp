@@ -10,7 +10,7 @@
 	<form action="/user/sign-in" method ="post">
 		<div class="form-group">
 			<label for="username">Username:</label>
-			<input type="text" class="form-control" placeholder="Enter username" id="username" name="username" value="길동">
+			<input type="text" class="form-control" placeholder="Enter username" id="username" name="username" value="cos">
 		</div>
 		<div class="form-group">
 			<label for="pwd">Password: </label>
