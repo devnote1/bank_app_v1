@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/view/layout/header.jsp"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<style>
+.small-text {
+    font-size: 0.70rem; /* Bootstrap 4의 기본 폰트 사이즈보다 작게 설정 */
+}
+</style>
 <div class="col-sm-8 d-flex flex-column">
 	<h2 class="pl-3">계좌 상세 보기(인증)</h2>
 	<h5 class="pl-3">어서오세요 환영합니다</h5>
@@ -12,9 +17,9 @@
 		</div>
 		<br>
 		<div>
-			<a href="/account/detail/1?type=all" class="btn btn-outline-primary">전체</a>&nbsp;
-			<a href="/account/detail/1?type=deposit" class="btn btn-outline-primary">입금</a>&nbsp;
-			<a href="/account/detail/1?type=withdrawal" class="btn btn-outline-primary">출금</a>
+			<a href="/account/detail/ ${account.id}?type=all" class="btn btn-outline-primary">전체</a>&nbsp;
+			<a href="/account/detail/${account.id}?type=deposit" class="btn btn-outline-primary">입금</a>&nbsp;
+			<a href="/account/detail/${account.id}?type=withdrawal" class="btn btn-outline-primary">출금</a>
 		</div>
 		<br>
 		<table class="table table-striped" >
@@ -29,7 +34,7 @@
 			</thead>
 			<tbody>
 			<c:forEach var="history" items="${historyList}">
-				<tr>
+				<tr class="small-text">
 					<th>${history.timestampToString(history.createdAt)}</th>
 					<th>${history.sender}</th>
 					<th>${history.receiver}</th>

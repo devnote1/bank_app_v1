@@ -198,6 +198,9 @@ public class AccountController {
 		if (dto.getDAccountNumber() == null || dto.getDAccountNumber().isEmpty()) {
 			throw new DataDeliveryException("이체하실 계좌번호를 입력해주세요.", HttpStatus.BAD_REQUEST);
 		}
+		if (dto.getDAccountNumber().equals(dto.getWAccountNumber())) {
+			throw new DataDeliveryException("같은 계좌로는 이체할 수 없습니다.", HttpStatus.BAD_REQUEST);
+		}
 		if (dto.getPassword() == null || dto.getPassword().isEmpty()) {
 			throw new DataDeliveryException(Define.ENTER_YOUR_PASSWORD, HttpStatus.BAD_REQUEST);
 		}

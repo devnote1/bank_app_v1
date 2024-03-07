@@ -91,7 +91,7 @@ public class UserController {
 		}
 		User principal = userService.signIn(dto);
 		session.setAttribute(Define.PRINCIPAL, principal);
-		return "redirect:/main-page";
+		return "redirect:/account/list";
 	}
 
 	/**
